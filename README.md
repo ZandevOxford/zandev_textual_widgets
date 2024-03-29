@@ -7,8 +7,13 @@ desktop apps.
 
 ## Installation
 
-These are not currently packaged. To use clone this repo and copy the
-widget code into your project.
+Install with
+
+```
+pip install zandev_textual_widgets
+```
+
+or just copy the code to your project.
 
 Dependencies are just textual, and pywin32 if you are running on
 Windows.
