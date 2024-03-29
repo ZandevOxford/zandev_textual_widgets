@@ -1,0 +1,22 @@
+[project]
+name = "zandev_textual_widgets"
+version = "0.0.1"
+authors = [
+  { name="John M Reynolds", email="zandev@gmail.com" },
+]
+description = "A selection of widgets for Textual"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    'Textual >= 0.53.1',
+    'pywin32 ; platform_system == "Windows"',
+]
+
+[project.urls]
+Homepage = "https://github.com/ZandevOxford/zandev_textual_widgets"
+Issues = "https://github.com/ZandevOxford/zandev_textual_widgets/issues"
