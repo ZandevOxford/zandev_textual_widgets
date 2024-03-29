@@ -10,6 +10,9 @@ desktop apps.
 These are not currently packaged. To use clone this repo and copy the
 widget code into your project.
 
+Dependencies are just textual, and pywin32 if you are running on
+Windows.
+
 ## Example
 
 See `testapp.py` as a simple example.
