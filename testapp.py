@@ -2,10 +2,12 @@
 
 import os
 
-import rich
-import rich.text
 from textual.app import App
-from textual.containers import Grid, Vertical, VerticalScroll
+from textual.containers import (
+    Grid,
+    Vertical,
+    VerticalScroll,
+)
 from textual.geometry import Offset
 from textual.screen import Screen
 from textual.widget import Widget
@@ -84,6 +86,9 @@ class Main(Screen):
     def action_toggle_dark(self) -> None:
         self.app.dark = not self.app.dark
 
+    def action_test_screen(self):
+        self.app.push_screen("test")
+
     def action_menu(self):
         self.menu_bar.activate()
 
@@ -142,8 +147,9 @@ class Main(Screen):
         )
         menu_screen.mount(app_menu)
         file_menu = Menu(
-            MenuItem(name="Open", menu_action="screen.file"),
+            MenuItem(name="Open", menu_action="screen.open"),
             MenuItem(name="Save", menu_action="screen.save"),
+            MenuItem(name="Test Screen", menu_action="screen.test_screen"),
             MenuItem(name="Test Menu", menu_action="menu.test_menu"),
             id="file_menu",
         )

@@ -13,13 +13,36 @@ import rich.text
 import textual.events as events
 from textual import work
 from textual.binding import Binding
-from textual.containers import Grid, Horizontal, ScrollableContainer, Vertical
+from textual.containers import (
+    Grid,
+    Horizontal,
+    ScrollableContainer,
+    Vertical,
+    VerticalScroll,
+)
 from textual.events import Key
 from textual.message import Message
 from textual.reactive import reactive
 from textual.screen import ModalScreen
 from textual.widget import Widget
-from textual.widgets import Button, DirectoryTree, Footer, Input, Label, Static
+from textual.widgets import (
+    Button,
+    DirectoryTree,
+    Footer,
+    Input,
+    Label,
+    ListItem,
+    ListView,
+    Static,
+)
+
+import platform
+
+IS_WINDOWS = False
+
+if platform.system() == "Windows":
+    IS_WINDOWS = True
+    import win32api
 
 
 class Dialog(ModalScreen[str]):
@@ -653,6 +676,23 @@ class DirUp(Button):
         super().__init__("↑")
 
 
+class SelectDrive(Button):
+    DEFAULT_CSS = """
+        SelectDrive {
+            margin-left: 1;
+            margin-right: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+            min-width: 1;
+            width: 4;
+            height: 3;
+        }
+    """
+
+    def __init__(self):
+        super().__init__("PC")
+
+
 class PathSeparator(Static):
     DEFAULT_CSS = """
         PathSeparator {
@@ -736,6 +776,60 @@ class UpdatePath(Message):
         self.path = path
 
 
+class DriveSelect(ModalScreen[str]):
+    DEFAULT_CSS = """
+    DriveSelect {
+        align: center middle;
+    }
+
+    DriveSelect Vertical {
+        width: 80%;
+        height: auto;
+        border: round $accent;
+    }
+
+    DriveSelect Horizontal {
+        height: auto;
+        border: round $primary-background;
+    }
+
+    DriveSelect Button {
+        margin-left: 1;
+        margin-right: 1;
+    }
+
+    DriveSelect Label {
+        margin: 1;
+    }
+
+    """
+    AUTO_FOCUS = "ListView"
+    BINDINGS = [Binding(key="escape", action="app.pop_screen", description="Close")]
+
+    def get_drives(self) -> List[str]:
+        if IS_WINDOWS:
+            drives = win32api.GetLogicalDriveStrings()
+            drives = drives.split("\000")[:-1]
+            return drives
+        return []
+
+    def compose(self):
+        drives = self.get_drives()
+        drive_list = ListView(*(ListItem(Label(name), name=name) for name in drives))
+        yield Vertical(
+            Label("Select drive"),
+            VerticalScroll(drive_list),
+            Button("Cancel"),
+        )
+        yield Footer()
+
+    async def on_list_view_selected(self, event: ListView.Selected):
+        self.dismiss(event.item.name)
+
+    async def on_button_pressed(self, event):
+        self.dismiss()
+
+
 class PathControl(ScrollableContainer):
 
     DEFAULT_CSS = """
@@ -762,6 +856,10 @@ class PathControl(ScrollableContainer):
         PathControl PathInput {
             width: auto;
             min-width: 100%;
+        }
+
+        PathControl Button {
+            width: 4;
         }
 
     """
@@ -1014,6 +1112,17 @@ class FileSelector(ModalScreen):
             background: $panel;
         }
 
+        FileSelector .TopGridWindows {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            grid-size: 4 1;
+            grid-columns: 3 5 1fr 6;
+            grid-rows: 3;
+            border: none;
+            background: $panel;
+        }
+
         FileSelector Input.valid {
             color: green;
         }
@@ -1092,13 +1201,20 @@ class FileSelector(ModalScreen):
         self.dirgrid = DirGrid(self.directory_tree, self.divider, self.file_list)
         self.dir_width = int(self.app.size.width / 4)
 
-        yield Grid(
-            Grid(
-                DirUp(),
+        top_grid = Grid(
+            classes="TopGrid" if not IS_WINDOWS else "TopGridWindows",
+        )
+        top_grid.mount(DirUp())
+        if IS_WINDOWS:
+            top_grid.mount(SelectDrive())
+        top_grid.mount_all(
+            (
                 self.directory_input,
                 Button("Edit", classes="DirEdit"),
-                classes="TopGrid",
-            ),
+            )
+        )
+        yield Grid(
+            top_grid,
             self.dirgrid,
             FileGrid(
                 Vertical(self.files_label, classes="Middle"),
@@ -1130,6 +1246,16 @@ class FileSelector(ModalScreen):
                 os.path.dirname(self.directory_input.path)
             )
             await self.path_changed()
+        elif type(button) == SelectDrive:
+
+            async def drive_callback(drive):
+                if drive:
+                    await self.directory_input.update_path(
+                        drive, notify=False, add=False
+                    )
+                    await self.path_changed()
+
+            self.app.push_screen(DriveSelect(), callback=drive_callback)
 
     async def path_changed(self):
         self.directory_tree.path = self.directory_input.valid_path
