@@ -421,6 +421,7 @@ class FileList(Widget):
         self.size_column = FileColumn()
         self.modified_column = FileColumn()
 
+    async def on_mount(self):
         self.container.mount(self.filename_column)
         self.container.mount(self.size_column)
         self.container.mount(self.modified_column)
@@ -1142,6 +1143,7 @@ class FileSelector(ModalScreen):
     filter_label: Optional[Input] = None
     divider: Optional[Widget] = None
     dirgrid: Optional[Widget] = None
+    top_grid: Optional[Widget] = None
     dir_width = reactive(30)
     filename: str = ""
     directory_tree: Optional[DirTree] = None
@@ -1201,18 +1203,14 @@ class FileSelector(ModalScreen):
         self.dirgrid = DirGrid(self.directory_tree, self.divider, self.file_list)
         self.dir_width = int(self.app.size.width / 4)
 
-        top_grid = Grid(
+        with Grid(
             classes="TopGrid" if not IS_WINDOWS else "TopGridWindows",
-        )
-        top_grid.mount(DirUp())
-        if IS_WINDOWS:
-            top_grid.mount(SelectDrive())
-        top_grid.mount_all(
-            (
-                self.directory_input,
-                Button("Edit", classes="DirEdit"),
-            )
-        )
+        ) as top_grid:
+            yield DirUp()
+            if IS_WINDOWS:
+                yield SelectDrive()
+            yield self.directory_input
+            yield Button("Edit", classes="DirEdit")
         yield Grid(
             top_grid,
             self.dirgrid,
@@ -1226,6 +1224,9 @@ class FileSelector(ModalScreen):
             ),
         )
         yield Footer()
+
+    async def on_mount(self):
+        pass
 
     def commit(self):
         self.dismiss(os.path.join(self.directory_input.path, self.files_input.value))

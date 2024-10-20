@@ -10,7 +10,6 @@ from textual.containers import (
 )
 from textual.geometry import Offset
 from textual.screen import Screen
-from textual.widget import Widget
 from textual.widgets import Button, Footer, Label, Log, Static
 
 from zandev_textual_widgets import (
@@ -140,80 +139,6 @@ class Main(Screen):
         self.t1.parent.move_child(self.t1, after=self.t2)
 
         menu_screen = self.app.get_screen("menu")
-        app_menu = Menu(
-            MenuItem(name="About", menu_action="screen.about"),
-            MenuItem(name="Quit", menu_action="screen.quit"),
-            id="app_menu",
-        )
-        menu_screen.mount(app_menu)
-        file_menu = Menu(
-            MenuItem(name="Open", menu_action="screen.open"),
-            MenuItem(name="Save", menu_action="screen.save"),
-            MenuItem(name="Test Screen", menu_action="screen.test_screen"),
-            MenuItem(name="Test Menu", menu_action="menu.test_menu"),
-            id="file_menu",
-        )
-        menu_screen.mount(file_menu)
-
-        action_menu = Menu(
-            MenuItem(name="Toggle Dark Mode", menu_action="screen.toggle_dark"),
-            MenuItem(name="Test Menu", menu_action="menu.test_menu"),
-            id="action_menu",
-        )
-        menu_screen.mount(action_menu)
-
-        def callback_test(name, action):
-            self.app.dark = not self.app.dark
-
-        test_menu = Menu(
-            MenuItem(name="Test Menu", menu_action="menu.test_menu_2"),
-            MenuItem(
-                name="Test Menu with some longer text", menu_action="menu.test_menu_2"
-            ),
-            MenuItem(name="Test Menu", menu_action="menu.test_menu_2"),
-            MenuItem(name="Test Menu", menu_action="menu.test_menu_2"),
-            MenuItem(
-                name="Dark mode via callback",
-                menu_action="action",
-                callback=callback_test,
-            ),
-            MenuItem(name="Missing menu", menu_action="menu.foo"),
-            id="test_menu",
-        )
-        menu_screen.mount(test_menu)
-
-        test_menu_2 = Menu(
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Menu", menu_action="menu.test_menu_3"),
-            MenuItem(name="Menu", menu_action="menu.test_menu_3"),
-            id="test_menu_2",
-        )
-        menu_screen.mount(test_menu_2)
-
-        test_menu_3 = Menu(
-            MenuItem(name="Item", disabled=True, menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", disabled=True, menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", menu_action="screen.about"),
-            MenuItem(name="Item", disabled=True, menu_action="screen.about"),
-            id="test_menu_3",
-        )
-        menu_screen.mount(test_menu_3)
 
         button = Button("A Button for testing context menus")
         button.can_focus == True
@@ -251,6 +176,85 @@ class Main(Screen):
 
     def action_about(self):
         self.app.push_screen(about_dialog)
+
+
+class TestMenuScreen(MenuScreen):
+
+    async def on_mount(self):
+        app_menu = Menu(
+            MenuItem(name="About", menu_action="screen.about"),
+            MenuItem(name="Quit", menu_action="screen.quit"),
+            id="app_menu",
+        )
+        self.mount(app_menu)
+        file_menu = Menu(
+            MenuItem(name="Open", menu_action="screen.open"),
+            MenuItem(name="Save", menu_action="screen.save"),
+            MenuItem(name="Test Screen", menu_action="screen.test_screen"),
+            MenuItem(name="Test Menu", menu_action="menu.test_menu"),
+            id="file_menu",
+        )
+        self.mount(file_menu)
+
+        action_menu = Menu(
+            MenuItem(name="Toggle Dark Mode", menu_action="screen.toggle_dark"),
+            MenuItem(name="Test Menu", menu_action="menu.test_menu"),
+            id="action_menu",
+        )
+        self.mount(action_menu)
+
+        def callback_test(name, action):
+            self.app.dark = not self.app.dark
+
+        test_menu = Menu(
+            MenuItem(name="Test Menu", menu_action="menu.test_menu_2"),
+            MenuItem(
+                name="Test Menu with some longer text", menu_action="menu.test_menu_2"
+            ),
+            MenuItem(name="Test Menu", menu_action="menu.test_menu_2"),
+            MenuItem(name="Test Menu", menu_action="menu.test_menu_2"),
+            MenuItem(
+                name="Dark mode via callback",
+                menu_action="action",
+                callback=callback_test,
+            ),
+            MenuItem(name="Missing menu", menu_action="menu.foo"),
+            id="test_menu",
+        )
+        self.mount(test_menu)
+
+        test_menu_2 = Menu(
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Menu", menu_action="menu.test_menu_3"),
+            MenuItem(name="Menu", menu_action="menu.test_menu_3"),
+            id="test_menu_2",
+        )
+        self.mount(test_menu_2)
+
+        test_menu_3 = Menu(
+            MenuItem(name="Item", disabled=True, menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", disabled=True, menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", menu_action="screen.about"),
+            MenuItem(name="Item", disabled=True, menu_action="screen.about"),
+            id="test_menu_3",
+        )
+        self.mount(test_menu_3)
 
 
 class TestScreen(Screen):
@@ -300,7 +304,7 @@ class TestApp(App):
     SCREENS = {
         "main": Main,
         "test": TestScreen,
-        "menu": MenuScreen,
+        "menu": TestMenuScreen,
     }
 
     def __init__(self, **kwargs):

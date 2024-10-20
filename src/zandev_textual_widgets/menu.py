@@ -402,6 +402,7 @@ class MenuBar(Widget):
 
     container = None
     previous_focus: Optional[Widget] = None
+    children: Optional[list[Widget]] = None
 
     def __init__(
         self,
@@ -415,8 +416,12 @@ class MenuBar(Widget):
         super().__init__(
             self.container, name=name, id=id, classes=classes, disabled=disabled
         )
-        for child in children:
-            self.container.mount(child)
+        self.children = children
+
+    async def on_mount(self):
+        if self.children:
+            for child in self.children:
+                self.container.mount(child)
 
     def activate(self):
         if self.container.children:
