@@ -6,7 +6,7 @@ with a focus on aiding writing apps which look and function more like
 desktop apps.
 
 Sadly this collection doesn't work with the current version of Textual,
-and a significant rewite may be needed, which hopefully will be soon.
+and a significant rewrite may be needed, which hopefully will be soon.
 
 ## Installation
 
