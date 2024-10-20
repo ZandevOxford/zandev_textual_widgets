@@ -1203,26 +1203,25 @@ class FileSelector(ModalScreen):
         self.dirgrid = DirGrid(self.directory_tree, self.divider, self.file_list)
         self.dir_width = int(self.app.size.width / 4)
 
-        with Grid(
-            classes="TopGrid" if not IS_WINDOWS else "TopGridWindows",
-        ) as top_grid:
-            yield DirUp()
-            if IS_WINDOWS:
-                yield SelectDrive()
-            yield self.directory_input
-            yield Button("Edit", classes="DirEdit")
-        yield Grid(
-            top_grid,
-            self.dirgrid,
-            FileGrid(
+
+        with Grid():
+            with Grid(
+                classes="TopGrid" if not IS_WINDOWS else "TopGridWindows",
+            ):
+                yield DirUp()
+                if IS_WINDOWS:
+                    yield SelectDrive()
+                yield self.directory_input
+                yield Button("Edit", classes="DirEdit")
+            yield self.dirgrid
+            yield FileGrid(
                 Vertical(self.files_label, classes="Middle"),
                 self.files_input,
                 Vertical(self.ok_button, classes="Middle Double"),
                 Vertical(self.cancel_button, classes="Middle Double"),
                 Vertical(self.filter_label, classes="Middle"),
                 self.filter_input,
-            ),
-        )
+            )
         yield Footer()
 
     async def on_mount(self):
