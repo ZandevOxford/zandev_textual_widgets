@@ -5,6 +5,9 @@ This is a collection of widgets for
 with a focus on aiding writing apps which look and function more like
 desktop apps.
 
+Sadly this collection doesn't work with the current version of Textual,
+and a significant rewite may be needed, which hopefully will be soon.
+
 ## Installation
 
 Install with
