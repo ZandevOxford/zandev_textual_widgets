@@ -298,9 +298,9 @@ class TestScreen(Screen):
 class TestApp(App):
 
     SCREENS = {
-        "main": Main(),
-        "test": TestScreen(),
-        "menu": MenuScreen(),
+        "main": Main,
+        "test": TestScreen,
+        "menu": MenuScreen,
     }
 
     def __init__(self, **kwargs):
