@@ -5,6 +5,9 @@ This is a collection of widgets for
 with a focus on aiding writing apps which look and function more like
 desktop apps.
 
+Currently includes widgets for file selection, cascading drop-down
+menus, and a simple choice dialog box.
+
 ## Installation
 
 Install with
