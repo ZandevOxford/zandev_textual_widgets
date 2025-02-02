@@ -1,6 +1,6 @@
 [project]
 name = "zandev_textual_widgets"
-version = "0.0.3"
+version = "1.0.0"
 authors = [
   { name="John M Reynolds", email="zandev@gmail.com" },
 ]
@@ -13,7 +13,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    'Textual >= 0.83.0',
+    'Textual >= 1.0.0',
     'pywin32 ; platform_system == "Windows"',
 ]
 
