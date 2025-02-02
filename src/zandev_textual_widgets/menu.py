@@ -219,6 +219,9 @@ class MenuScreen(ModalScreen[str]):
         if not event.button:
             self.mode = "click"
 
+    async def on_mount(self):
+        self.hide_all()
+
     def action_close(self):
         self.close()
 

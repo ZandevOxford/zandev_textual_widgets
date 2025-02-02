@@ -256,6 +256,8 @@ class TestMenuScreen(MenuScreen):
         )
         self.mount(test_menu_3)
 
+        await super().on_mount()
+
 
 class TestScreen(Screen):
     BINDINGS = [("escape", "app.pop_screen", "Close")]
