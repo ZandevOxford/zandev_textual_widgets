@@ -108,7 +108,7 @@ class Main(Screen):
             callback=save_result,
         )
 
-    async def action_file(self):
+    async def action_open(self):
         def file_result(value):
             self.log_widget.write_line(f"Open file {value}")
 
