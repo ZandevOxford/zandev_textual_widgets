@@ -373,19 +373,21 @@ class MenuHeader(Widget):
     def render(self):
         return self.name
 
-# TODO: On the latest Textual, popping up the menu on mouse down messes up the original
-# screen as it still thinks the mouse is down and tries to select text. So for now
-# disable the click and release menu selection until I can work out a way to fix this.
+# TODO: On the latest Textual, the general selection using ALLOW_SELECT messes up
+# the press and hold of the menu, so for now disable this if that is enabled.
 
-#    async def on_mouse_down(self, event: MouseDown) -> None:
-#        await self.app.get_screen("menu").open_menu(self)
-
-#    async def on_mouse_release(self, event: Event):
-#        event.stop()
-#        self.app.set_focus(None)
+    async def on_mouse_down(self, event: MouseDown) -> None:
+        if not self.app.ALLOW_SELECT:
+            await self.app.get_screen("menu").open_menu(self)
+ 
+    async def on_mouse_release(self, event: Event):
+        if not self.app.ALLOW_SELECT:
+            event.stop()
+            self.app.set_focus(None)
 
     async def on_click(self, event: MouseDown) -> None:
-        await self.app.get_screen("menu").open_menu(self)
+        if self.app.ALLOW_SELECT:
+            await self.app.get_screen("menu").open_menu(self)
 
     async def on_key(self, event: Key) -> None:
         if event.key in ("space", "enter", "down"):

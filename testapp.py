@@ -316,6 +316,11 @@ class TestApp(App):
         "menu": TestMenuScreen,
     }
 
+    # Currently ALLOW_SELECT clashes with the drag functionality of the menu.
+    # The menus will still work, but you will need to click on the header rather
+    # than dragging from the header to open the menu.
+    ALLOW_SELECT = False
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
