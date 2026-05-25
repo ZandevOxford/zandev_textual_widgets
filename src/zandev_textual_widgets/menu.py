@@ -360,6 +360,8 @@ class MenuHeader(Widget):
 
     """
 
+    ALLOW_SELECT = False
+
     name = reactive("")
     menu_id = reactive("")
 
@@ -373,21 +375,12 @@ class MenuHeader(Widget):
     def render(self):
         return self.name
 
-# TODO: On the latest Textual, the general selection using ALLOW_SELECT messes up
-# the press and hold of the menu, so for now disable this if that is enabled.
-
     async def on_mouse_down(self, event: MouseDown) -> None:
-        if not self.app.ALLOW_SELECT:
-            await self.app.get_screen("menu").open_menu(self)
+        await self.app.get_screen("menu").open_menu(self)
  
     async def on_mouse_release(self, event: Event):
-        if not self.app.ALLOW_SELECT:
-            event.stop()
-            self.app.set_focus(None)
-
-    async def on_click(self, event: MouseDown) -> None:
-        if self.app.ALLOW_SELECT:
-            await self.app.get_screen("menu").open_menu(self)
+        event.stop()
+        self.app.set_focus(None)
 
     async def on_key(self, event: Key) -> None:
         if event.key in ("space", "enter", "down"):

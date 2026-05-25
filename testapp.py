@@ -196,6 +196,7 @@ class TestMenuScreen(MenuScreen):
         self.mount(app_menu)
         file_menu = Menu(
             MenuItem(name="Open", menu_action="screen.open"),
+            MenuItem(name="Open Directory", menu_action="screen.dir"),
             MenuItem(name="Save", menu_action="screen.save"),
             MenuItem(name="Test Screen", menu_action="screen.test_screen"),
             MenuItem(name="Test Menu", menu_action="menu.test_menu"),
@@ -315,11 +316,6 @@ class TestApp(App):
         "test": TestScreen,
         "menu": TestMenuScreen,
     }
-
-    # Currently ALLOW_SELECT clashes with the drag functionality of the menu.
-    # The menus will still work, but you will need to click on the header rather
-    # than dragging from the header to open the menu.
-    ALLOW_SELECT = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

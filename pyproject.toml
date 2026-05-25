@@ -1,6 +1,6 @@
 [project]
 name = "zandev_textual_widgets"
-version = "1.1.0"
+version = "1.2.0"
 authors = [
   { name="John M Reynolds", email="zandev@gmail.com" },
 ]
