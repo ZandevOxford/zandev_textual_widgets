@@ -373,7 +373,18 @@ class MenuHeader(Widget):
     def render(self):
         return self.name
 
-    async def on_mouse_down(self, event: MouseDown) -> None:
+# TODO: On the latest Textual, popping up the menu on mouse down messes up the original
+# screen as it still thinks the mouse is down and tries to select text. So for now
+# disable the click and release menu selection until I can work out a way to fix this.
+
+#    async def on_mouse_down(self, event: MouseDown) -> None:
+#        await self.app.get_screen("menu").open_menu(self)
+
+#    async def on_mouse_release(self, event: Event):
+#        event.stop()
+#        self.app.set_focus(None)
+
+    async def on_click(self, event: MouseDown) -> None:
         await self.app.get_screen("menu").open_menu(self)
 
     async def on_key(self, event: Key) -> None:
@@ -384,10 +395,6 @@ class MenuHeader(Widget):
         elif event.key == ("escape"):
             self.can_focus = False
             self.app.set_focus(self.parent.parent.previous_focus)
-
-    async def on_mouse_release(self, event: Event):
-        event.stop()
-        self.app.set_focus(None)
 
     async def on_event(self, event: Event) -> None:
         return await super().on_event(event)
