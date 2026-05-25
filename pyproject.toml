@@ -1,19 +1,19 @@
 [project]
 name = "zandev_textual_widgets"
-version = "1.0.0"
+version = "1.1.0"
 authors = [
   { name="John M Reynolds", email="zandev@gmail.com" },
 ]
 description = "A selection of widgets for Textual"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    'Textual >= 1.0.0',
+    'Textual >= 8.0.0',
     'pywin32 ; platform_system == "Windows"',
 ]
 

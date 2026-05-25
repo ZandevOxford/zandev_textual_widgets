@@ -42,6 +42,13 @@ overwrite_dialog = Dialog(
 )
 
 
+def toggle_dark_mode(theme: str):
+    if theme == "textual-dark":
+        return "textual-light"
+    else:
+        return "textual-dark"
+
+
 class Main(Screen):
     CSS_PATH = "app.tcss"
     BINDINGS = [
@@ -83,7 +90,7 @@ class Main(Screen):
         self.app.push_screen(quit_dialog, check_quit)
 
     def action_toggle_dark(self) -> None:
-        self.app.dark = not self.app.dark
+        self.app.theme = toggle_dark_mode(self.app.theme)
 
     def action_test_screen(self):
         self.app.push_screen("test")
@@ -204,7 +211,7 @@ class TestMenuScreen(MenuScreen):
         self.mount(action_menu)
 
         def callback_test(name, action):
-            self.app.dark = not self.app.dark
+            self.app.theme = toggle_dark_mode(self.app.theme)
 
         test_menu = Menu(
             MenuItem(name="Test Menu", menu_action="menu.test_menu_2"),
